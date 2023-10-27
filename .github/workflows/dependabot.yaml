@@ -1,0 +1,30 @@
+name: Auto approve and merge PRs by dependabot
+
+# Trigger the workflow on pull request
+on:
+  pull_request_target: {}
+
+jobs:
+  dependabot:
+    name: Auto Approve and merge PR by dependabot # Name of the job
+    if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
+    runs-on: ubuntu-latest # Environment on which the job runs
+    steps:
+      - name: Auto approve
+        uses: hmarr/auto-approve-action@v3.2.1 # Custom action for auto approval already available on marketplace
+        # Perform the auto approve action only when the PR is raised by dependabot
+        with:
+          # Create a personal access token and store it under the Secrets section of the particular repository
+          # with the key "GITHUB_ACTIONS_TOKEN"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto merge
+        # Custom action for auto merging already available on marketplace
+        uses: pascalgn/automerge-action@v0.15.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # By default, whenever dependabot raises a PR, it automatically assigns a label named "dependencies"
+          # So, this action merges those PRs labelled "dependencies" only
+          MERGE_LABELS: dependencies
+          MERGE_RETRIES: "30"
+          MERGE_RETRY_SLEEP: "30000"
