@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "esphome-plus"
+version = "0.1.0"
+description = ""
+authors = ["Subhash Chandra <TMaYaD@LoonyB.in>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "^8.1.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
