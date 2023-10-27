@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 click = "^8.1.7"
+esphome = "^2023.10.3"
 
 [tool.poetry.scripts]
 esphome-plus = 'esphome_plus.cli:run'
