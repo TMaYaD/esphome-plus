@@ -11,7 +11,7 @@ click = "^8.1.7"
 esphome = "^2023.10.3"
 
 [tool.poetry.scripts]
-esphome-plus = 'esphome_plus.cli:run'
+esphome-plus = 'esphome_plus:cli'
 
 [build-system]
 requires = ["poetry-core"]
