@@ -13,36 +13,37 @@ from .config_util import normalize_config, show_diff
 
 
 @click.command(context_settings=dict(ignore_unknown_options=True))
-@click.argument("file_path", type=click.Path(exists=True))
+@click.argument("config_path", type=click.Path(exists=True))
 @click.option("--quite", "-q", is_flag=True, help="Hide verbose output")
-@click.option(
-    "--interactive/--no-interactive",
-    "-i/-I",
-    is_flag=True,
-    help="Ask before applying changes",
-)
+@click.option("--ask", "-a", is_flag=True, help="Ask before applying changes")
 @click.option(
     "--dry-run", "-d", is_flag=True, help="Show changes without applying them"
 )
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @click.pass_context
-def reconcile(ctx, file_path, quite, interactive, dry_run, args):
-    if not os.path.isdir(file_path):
-        reconcile_file(ctx, file_path, quite, interactive, dry_run, args)
+def reconcile(ctx, config_path, *args, **kwargs):
+    """
+    Reconcile ESPHome YAML files with a running device.
+
+    This tool will read the YAML file(s) at CONFIG_PATH and compare them
+    to the YAML files running on the device. If there are differences,
+    it will prompt the user to apply them.
+
+    CONFIG_PATH can be a single YAML file or a directory of YAML files.
+    If CONFIG_PATH is a directory, reconcile will apply to all .yaml files
+    """
+
+    if not os.path.isdir(config_path):
+        reconcile_file(ctx, config_path, *args, **kwargs)
         return
 
     errors = {}
-    # file_path is a directory. Apply reconcile_file to all .yaml files in the directory
-    for file_name in os.listdir(file_path):
+    # config_path is a directory. Apply reconcile_file to all .yaml files in the directory
+    for file_name in os.listdir(config_path):
         if file_name.endswith(".yaml"):
             try:
                 reconcile_file(
-                    ctx,
-                    os.path.join(file_path, file_name),
-                    quite,
-                    interactive,
-                    dry_run,
-                    args,
+                    ctx, os.path.join(config_path, file_name), *args, **kwargs
                 )
             except Exception as e:
                 errors[file_name] = e
@@ -53,11 +54,11 @@ def reconcile(ctx, file_path, quite, interactive, dry_run, args):
             click.echo(f"Error reconciling {file_name}: {e}", err=True)
 
 
-def reconcile_file(ctx, file_path, quite, interactive, dry_run, args):
+def reconcile_file(ctx, config_path, quite, ask, dry_run, args):
     if not quite:
-        click.echo(f"Reconciling {file_path}")
+        click.echo(f"Reconciling {config_path}")
 
-    config = load_config_from_file(file_path)
+    config = load_config_from_file(config_path)
     current_config = load_config_content_from_device(config)
 
     # Compute the semantic difference between the two YAML files
@@ -76,14 +77,14 @@ def reconcile_file(ctx, file_path, quite, interactive, dry_run, args):
         show_diff(current_config, config)
 
         # If there are differences, ask the user if they want to apply them
-        if interactive and not click.confirm("Apply these changes?"):
+        if ask and not click.confirm("Apply these changes?"):
             return
 
     if dry_run:
         return
 
     # Apply the changes
-    run_esphome(["esphome", "run", file_path, *args])
+    run_esphome(["esphome", "run", config_path, *args])
 
 
 def load_config_from_file(path):
