@@ -21,7 +21,7 @@ from .config_util import normalize_config, show_diff
 )
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @click.pass_context
-def reconcile(ctx, config_path, *args, **kwargs):
+def reconcile(ctx, config_path, **kwargs):
     """
     Reconcile ESPHome YAML files with a running device.
 
@@ -34,8 +34,12 @@ def reconcile(ctx, config_path, *args, **kwargs):
     """
 
     if not os.path.isdir(config_path):
-        reconcile_file(ctx, config_path, *args, **kwargs)
+        reconcile_file(ctx, config_path, **kwargs)
         return
+
+    # If CONFIG_PATH is a directory, we need to pass --no-logs to esphome, otherwise
+    # it will get stuck streaming logs from the first file
+    kwargs["args"] += ("--no-logs",)
 
     errors = {}
     # config_path is a directory. Apply reconcile_file to all .yaml files in the directory
@@ -43,7 +47,9 @@ def reconcile(ctx, config_path, *args, **kwargs):
         if file_name.endswith(".yaml"):
             try:
                 reconcile_file(
-                    ctx, os.path.join(config_path, file_name), *args, **kwargs
+                    ctx,
+                    os.path.join(config_path, file_name),
+                    **kwargs,
                 )
             except Exception as e:
                 errors[file_name] = e
