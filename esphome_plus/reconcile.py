@@ -37,13 +37,21 @@ def reconcile(ctx, config_path, *args, **kwargs):
         reconcile_file(ctx, config_path, *args, **kwargs)
         return
 
+    # If CONFIG_PATH is a directory, we need to pass --no-logs to esphome, otherwise
+    # it will get stuck streaming logs from the first file
+    args += ("--no-logs",)
+
     errors = {}
     # config_path is a directory. Apply reconcile_file to all .yaml files in the directory
     for file_name in os.listdir(config_path):
         if file_name.endswith(".yaml"):
             try:
                 reconcile_file(
-                    ctx, os.path.join(config_path, file_name), *args, **kwargs
+                    ctx,
+                    os.path.join(config_path, file_name),
+                    "--no-logs",
+                    *args,
+                    **kwargs,
                 )
             except Exception as e:
                 errors[file_name] = e
