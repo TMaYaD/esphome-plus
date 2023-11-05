@@ -88,6 +88,7 @@ def reconcile_file(ctx, config_path, quite, ask, dry_run, args):
         return
 
     # Apply the changes
+    CORE.reset()
     run_esphome(["esphome", "run", config_path, *args])
 
 
