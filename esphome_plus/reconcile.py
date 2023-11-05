@@ -66,7 +66,11 @@ def reconcile_file(ctx, config_path, quite, ask, dry_run, args):
         current_config,
         config,
         ignore_order=True,
-        exclude_paths=["root['substitutions']", "root['wifi']['use_address']"],
+        exclude_paths=[
+            "root['substitutions']",
+            "root['wifi']['use_address']",
+            "root['esphome']['min_version']",
+        ],
     )
 
     if not diff:
