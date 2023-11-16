@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 click = "^8.1.7"
-esphome = "^2023.10.6"
+esphome = "^2023.11.1"
 deepdiff = "^6.7.0"
 icdiff = "^2.0.7"
 
