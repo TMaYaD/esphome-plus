@@ -2,18 +2,18 @@
 
 [[package]]
 name = "aioesphomeapi"
-version = "18.4.0"
+version = "18.5.2"
 description = "Python API for interacting with ESPHome devices."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "aioesphomeapi-18.4.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4308deeb0babf2c31fc9bbfb9bfbd4d0014dc69bac934a9a212009fe7d0a15a8"},
-    {file = "aioesphomeapi-18.4.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8496a7ac6b965ab71ce016270413ea822bbf5ae6f675f3e61ab536631d1721a8"},
-    {file = "aioesphomeapi-18.4.0-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:76faa51a20e31ec19f2ca81b1a21892fc27c82adf83508010cd5d66b8bb992a8"},
-    {file = "aioesphomeapi-18.4.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:edf9b8a6da97e68bc1229f11a4537bd28de9d5afc2739522e1710d3db4bae64b"},
-    {file = "aioesphomeapi-18.4.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1193ca61ae700b8787791b0fde19d4737c38b4be21096be90bbc2288508c78a1"},
-    {file = "aioesphomeapi-18.4.0-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:45bccf01a7daab8e6a2ea296a00d927bc578a32e520f610992093a09037ee4d6"},
-    {file = "aioesphomeapi-18.4.0.tar.gz", hash = "sha256:8e92a9271f03ab2b5865ab142100c68f0cb50ee73895a0325b2c257929d7a784"},
+    {file = "aioesphomeapi-18.5.2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6115816d6a83c6b84e315e3b2a17f19487b01fecaf3aada825de1acece0674e1"},
+    {file = "aioesphomeapi-18.5.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:72fa615c21d77af56cb4b8e85337807cd27e95ebbd71e474e1ce9ff82ce41bf8"},
+    {file = "aioesphomeapi-18.5.2-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:6b74bcf8af430cc707f3a850633395bef8e531fbc1615201c50567c707b9a950"},
+    {file = "aioesphomeapi-18.5.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3051de067dbe18bbcdc124b4dc682fceba32986031d36897cde2ce7c6fdcffcf"},
+    {file = "aioesphomeapi-18.5.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:233ecf7b6378fa61b7a1943cc3ba510ab4912979dd9f275cc8f63e7d3b23263b"},
+    {file = "aioesphomeapi-18.5.2-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:fa22e9e4023aa4d4244bfcc4dfcacba5442736410a18dabcd8360aa348700e7f"},
+    {file = "aioesphomeapi-18.5.2.tar.gz", hash = "sha256:2e74647f2c2ff88c714313b51f2b07097bbfd7f04fcc17c8a8bcb0d7a6a887e2"},
 ]
 
 [package.dependencies]
@@ -630,17 +630,17 @@ gmpy2 = ["gmpy2"]
 
 [[package]]
 name = "esphome"
-version = "2023.11.1"
+version = "2023.11.2"
 description = "Make creating custom firmwares for ESP32/ESP8266 super easy."
 optional = false
 python-versions = ">=3.9.0"
 files = [
-    {file = "esphome-2023.11.1-py2.py3-none-any.whl", hash = "sha256:b93dab3b67111c12deda4ef065979f159163a477a4df89f9863cc53541a67e36"},
-    {file = "esphome-2023.11.1.tar.gz", hash = "sha256:de6a894037c8654bf531dbc07b6d3d6ea3c8f6515f856849820d4811c335e207"},
+    {file = "esphome-2023.11.2-py2.py3-none-any.whl", hash = "sha256:e6814439b347aefbb9b89dc3590f53a24936acfcd55ba3807fff4e7420d159d8"},
+    {file = "esphome-2023.11.2.tar.gz", hash = "sha256:4da7f91b4fb8d786536062e9b7991677febbd11aa58b9eea769e050ccfd353f6"},
 ]
 
 [package.dependencies]
-aioesphomeapi = "18.4.0"
+aioesphomeapi = "18.5.2"
 argcomplete = ">=2.0.0"
 click = "8.1.7"
 colorama = "0.4.6"
@@ -1490,4 +1490,4 @@ pretty-diffs = ["icdiff"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "2f11356c61c14c20ef10b860b1262b9be4a8552ef327b27124666e6fc28a7ae1"
+content-hash = "a06dd746d3472bce5efaf9d5f0bd053edcd71852641e99a2d622652ed1fd81db"
