@@ -24,6 +24,15 @@ ESPHome Plus offers all the commands available in ESPHome. You can use these com
 
 The `reconcile` command in ESPHome Plus is designed to simplify the management of your ESPHome YAML configurations and devices. This tool is specifically created to use with gitops model. You can point it to your desired config and it will update the devices as required. It identifies any differences between your local YAML files and the device's configurations and allows you to interactively apply these changes.
 
+Your device needs to be configured to serve the device config at `/config.yaml`. You can use the [Backup Component by Dentra](https://github.com/dentra/esphome-components/tree/master/components/backup) by including the following in your device config:
+
+```yaml
+external_components:
+  - source: github://dentra/esphome-components
+
+backup:
+```
+
 ### Command Syntax
 
 To use the `reconcile` command, follow the syntax below:
