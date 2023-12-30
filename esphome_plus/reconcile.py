@@ -10,6 +10,7 @@ from esphome.yaml_util import dump
 
 from .upstream import make_wrapper
 from .config_util import normalize_config, show_diff
+from .two_stage import perform_two_stage
 
 
 @click.command(context_settings=dict(ignore_unknown_options=True))
@@ -101,8 +102,7 @@ def reconcile_file(ctx, config_path, quite, ask, dry_run, args):
         return
 
     # Apply the changes
-    CORE.reset()
-    run_esphome(["esphome", "run", config_path, *args])
+    perform_two_stage(config_path, args)
 
 
 def load_config_from_file(path):
