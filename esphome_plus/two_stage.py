@@ -1,6 +1,9 @@
 import click
+import functools
 import os
+import socket
 import sys
+import time
 
 from esphome.__main__ import run_esphome
 from esphome import espota2
@@ -29,8 +32,16 @@ def perform_two_stage(config_path, args):
     except OTABinarySizeError as e:
         # If we get an OTA error, we need to run esphome again with --no-logs
         # to get the full error message
+        click.echo(
+            click.style(
+                "Error binary size, starting two stage upgrade...", fg="yellow"
+            ),
+            err=True,
+        )
+        click.echo("Installing minimal esphome...", err=True)
         install_minimal_esphome(config_path, *args)
 
+        click.echo("Retrying OTA update...", err=True)
         # then retry the OTA update
         CORE.reset()
         run_esphome(["esphome", "run", config_path, *args])
@@ -75,42 +86,72 @@ def install_minimal_esphome(config_path, *args):
             *args,
         ]
     )
+    wait_for_ota(
+        minimal_esphome.minimal_config["wifi"]["use_address"],
+        minimal_esphome.minimal_config["ota"]["port"],
+    )
     os.remove(minimal_esphome.minimal_config_path)
+
+
+def wait_for_ota(host, port):
+    click.echo("Waiting for OTA and reboot to complete...")
+
+    host = socket.gethostbyname(host)
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(10.0)
+    while True:
+        try:
+            click.echo("Trying to connect to OTA server...")
+            sock.connect((host, port))
+            click.echo("OTA successful!")
+            return 0
+        except OSError as err:
+            click.echo(
+                click.style(f"Error connecting to OTA server: {err}", fg="yellow"),
+                err=True,
+            )
+            time.sleep(1)
+        finally:
+            sock.close()
 
 
 class MinimalEsphome:
     def __init__(self, full_config_path):
         self.full_config_path = full_config_path
-        base, ext = os.path.splitext(full_config_path)
-        head, tail = os.path.split(base)
-        self.minimal_config_path = head + "." + tail + ".minimal" + ext
 
+    @functools.cached_property
+    def minimal_config_path(self):
+        base, ext = os.path.splitext(self.full_config_path)
+        head, tail = os.path.split(base)
+        return head + "/." + tail + ".minimal" + ext
+
+    @functools.cached_property
     def full_config(self):
         CORE.config_path = self.full_config_path
         return strip_default_ids(read_config({}))
 
+    @functools.cached_property
     def minimal_config(self):
         CORE.config_path = self.minimal_config_path
 
-        full_config = self.full_config()
-
         config = OrderedDict()
-        config["esphome"] = full_config["esphome"]
-        platform = self.platform(full_config)
+        config["esphome"] = self.full_config["esphome"]
+        platform = self.platform(self.full_config)
 
         config["esphome"]["build_path"] = "build/minimal/" + platform
-        config[platform] = full_config[platform]
+        config[platform] = self.full_config[platform]
 
-        config["logger"] = full_config["logger"]
-        config["wifi"] = full_config["wifi"]
-        config["ota"] = full_config["ota"]
-        config["captive_portal"] = full_config["captive_portal"]
+        config["logger"] = self.full_config["logger"]
+        config["wifi"] = self.full_config["wifi"]
+        config["ota"] = self.full_config["ota"]
+        config["captive_portal"] = self.full_config["captive_portal"]
 
         return config
 
     def generate_minimal_config(self):
         with open(self.minimal_config_path, "w") as f:
-            f.write(dump(self.minimal_config(), show_secrets=True))
+            f.write(dump(self.minimal_config, show_secrets=True))
 
     def platform(self, config):
         if "esp32" in config:
