@@ -43,16 +43,23 @@ def reconcile(ctx, config_path, **kwargs):
 
     errors = {}
     # config_path is a directory. Apply reconcile_file to all .yaml files in the directory
-    for file_name in os.listdir(config_path):
-        if file_name.endswith(".yaml"):
-            try:
-                reconcile_file(
-                    ctx,
-                    os.path.join(config_path, file_name),
-                    **kwargs,
-                )
-            except Exception as e:
-                errors[file_name] = e
+    for file_name in sorted(os.listdir(config_path)):
+        if not file_name.endswith(".yaml"):
+            continue
+
+        if file_name.startswith("."):
+            continue
+
+        try:
+            reconcile_file(
+                ctx,
+                os.path.join(config_path, file_name),
+                **kwargs,
+            )
+        except Exception as e:
+            errors[file_name] = e
+        finally:
+            CORE.reset()
 
     if errors:
         click.echo("Errors occurred while reconciling files:")
