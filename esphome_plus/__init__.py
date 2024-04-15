@@ -15,6 +15,10 @@ from .register import register
 
 cli.add_command(register)
 
+from .two_stage import two_stage
+
+cli.add_command(two_stage)
+
 from .upstream import add_upsteam_commands_to
 
 add_upsteam_commands_to(cli)
