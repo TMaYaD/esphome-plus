@@ -563,17 +563,17 @@ files = [
 
 [[package]]
 name = "deepdiff"
-version = "7.0.1"
+version = "8.0.0"
 description = "Deep Difference and Search of any Python object/data. Recreate objects by adding adding deltas to each other."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "deepdiff-7.0.1-py3-none-any.whl", hash = "sha256:447760081918216aa4fd4ca78a4b6a848b81307b2ea94c810255334b759e1dc3"},
-    {file = "deepdiff-7.0.1.tar.gz", hash = "sha256:260c16f052d4badbf60351b4f77e8390bee03a0b516246f6839bc813fb429ddf"},
+    {file = "deepdiff-8.0.0-py3-none-any.whl", hash = "sha256:9612e6be89939819a0d7fa337902e056edcb3b200a9dfcd7823d61b76ccd72a3"},
+    {file = "deepdiff-8.0.0.tar.gz", hash = "sha256:1f751f39984a0516686fddeccb80d43903abd14ac42d2ebeb8ae7c4f91420c6d"},
 ]
 
 [package.dependencies]
-ordered-set = ">=4.1.0,<4.2.0"
+orderly-set = "5.2.1"
 
 [package.extras]
 cli = ["click (==8.1.7)", "pyyaml (==6.0.1)"]
@@ -882,18 +882,15 @@ files = [
 cryptography = ">=2.8"
 
 [[package]]
-name = "ordered-set"
-version = "4.1.0"
-description = "An OrderedSet is a custom MutableSet that remembers its order, so that every"
+name = "orderly-set"
+version = "5.2.1"
+description = "Orderly set"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "ordered-set-4.1.0.tar.gz", hash = "sha256:694a8e44c87657c59292ede72891eb91d34131f6531463aab3009191c77364a8"},
-    {file = "ordered_set-4.1.0-py3-none-any.whl", hash = "sha256:046e1132c71fcf3330438a539928932caf51ddbc582496833e23de611de14562"},
+    {file = "orderly_set-5.2.1-py3-none-any.whl", hash = "sha256:8174adbd2908aa45645a897c531de63d4b5f3bdfaf8333821a2fcb5901eb3f23"},
+    {file = "orderly_set-5.2.1.tar.gz", hash = "sha256:2adab28582db06f3fec29eaf1b31cc55358d2d9471a54e89a285cfa194258328"},
 ]
-
-[package.extras]
-dev = ["black", "mypy", "pytest"]
 
 [[package]]
 name = "packaging"
@@ -1579,4 +1576,4 @@ pretty-diffs = ["icdiff"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "901d9548566a221b786a467f36c266be84fad97a29cf71731a2ddee5b48848b0"
+content-hash = "bdbc87b90ae2337ca245c9913ff42b8457d34cd5804bed529e166a43489065a3"
