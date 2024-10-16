@@ -599,13 +599,13 @@ gmpy2 = ["gmpy2"]
 
 [[package]]
 name = "esphome"
-version = "2024.9.2"
+version = "2024.10.0"
 description = "Make creating custom firmwares for ESP32/ESP8266 super easy."
 optional = false
 python-versions = ">=3.9.0"
 files = [
-    {file = "esphome-2024.9.2-py3-none-any.whl", hash = "sha256:c5371a70accf0b87e65014c8a7f4ceda74120060a638d3bd2f23181c64cf7cab"},
-    {file = "esphome-2024.9.2.tar.gz", hash = "sha256:caa9569b11706d3ac593372ffec80521af032b30348ae7e2f2b78fe6fe9a401a"},
+    {file = "esphome-2024.10.0-py3-none-any.whl", hash = "sha256:4fcaad75d201e6f4b9c50db1c3115c6562cceb0a8b137e618c170a6d94c09dc2"},
+    {file = "esphome-2024.10.0.tar.gz", hash = "sha256:a74480529d4814214132ae68e665bcb37ba41a7cd34cd6c0e2e0a0d538c43c1a"},
 ]
 
 [package.dependencies]
@@ -620,9 +620,9 @@ icmplib = "3.0.4"
 kconfiglib = "13.7.1"
 paho-mqtt = "1.6.1"
 platformio = "6.1.15"
+puremagic = "1.27"
 pyparsing = ">=3.0"
 pyserial = "3.5"
-python-magic = "0.4.27"
 PyYAML = "6.0.1"
 "ruamel.yaml" = "0.18.6"
 tornado = "6.4"
@@ -634,7 +634,7 @@ zeroconf = "0.132.2"
 [package.extras]
 dev = ["clang-format (==13.0.1)", "clang-tidy (==14.0.6)", "yamllint (==1.35.1)"]
 displays = ["cairosvg (==2.7.1)", "pillow (==10.2.0)"]
-test = ["asyncmock (==0.4.2)", "black (==24.4.2)", "flake8 (==7.0.0)", "hypothesis (==6.92.1)", "pre-commit", "pylint (==3.1.0)", "pytest (==8.2.0)", "pytest-asyncio (==0.23.6)", "pytest-cov (==5.0.0)", "pytest-mock (==3.14.0)", "pyupgrade (==3.15.2)"]
+test = ["asyncmock (==0.4.2)", "black (==24.4.2)", "flake8 (==7.0.0)", "hypothesis (==6.92.1)", "pre-commit", "pylint (==3.2.7)", "pytest (==8.2.0)", "pytest-asyncio (==0.23.6)", "pytest-cov (==5.0.0)", "pytest-mock (==3.14.0)", "pyupgrade (==3.15.2)"]
 
 [[package]]
 name = "esphome-dashboard"
@@ -1043,6 +1043,17 @@ files = [
 tests = ["pytest"]
 
 [[package]]
+name = "puremagic"
+version = "1.27"
+description = "Pure python implementation of magic file detection"
+optional = false
+python-versions = "*"
+files = [
+    {file = "puremagic-1.27-py3-none-any.whl", hash = "sha256:b5519ad89e9b7c96a5fd9947d9a907e44f97cc30eae6dcf746d90a58e3681936"},
+    {file = "puremagic-1.27.tar.gz", hash = "sha256:7cb316f40912f56f34149f8ebdd77a91d099212d2ed936feb2feacfc7cbce2c1"},
+]
+
+[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
@@ -1105,17 +1116,6 @@ files = [
 
 [package.extras]
 cp2110 = ["hidapi"]
-
-[[package]]
-name = "python-magic"
-version = "0.4.27"
-description = "File type identification using libmagic"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-files = [
-    {file = "python-magic-0.4.27.tar.gz", hash = "sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b"},
-    {file = "python_magic-0.4.27-py2.py3-none-any.whl", hash = "sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3"},
-]
 
 [[package]]
 name = "pyyaml"
@@ -1576,4 +1576,4 @@ pretty-diffs = ["icdiff"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b7e22bb33c7bda1328a5c27d8bd05d35c5396cfb0010eb01be2961fc0b374012"
+content-hash = "150b05a14dbc5b5db35ddd98d367359d2fe581fe73bca94401aee97a39f1640d"
