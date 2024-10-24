@@ -599,13 +599,13 @@ gmpy2 = ["gmpy2"]
 
 [[package]]
 name = "esphome"
-version = "2024.10.0"
+version = "2024.10.2"
 description = "Make creating custom firmwares for ESP32/ESP8266 super easy."
 optional = false
 python-versions = ">=3.9.0"
 files = [
-    {file = "esphome-2024.10.0-py3-none-any.whl", hash = "sha256:4fcaad75d201e6f4b9c50db1c3115c6562cceb0a8b137e618c170a6d94c09dc2"},
-    {file = "esphome-2024.10.0.tar.gz", hash = "sha256:a74480529d4814214132ae68e665bcb37ba41a7cd34cd6c0e2e0a0d538c43c1a"},
+    {file = "esphome-2024.10.2-py3-none-any.whl", hash = "sha256:8e625f4f9767f38a239542fc9fd56c107f34345c8750f8e71f57810b08ef074a"},
+    {file = "esphome-2024.10.2.tar.gz", hash = "sha256:b56c1cc7f444c075f8267ea62192a44a68dc2ceba7c385d4264189c6272a15e3"},
 ]
 
 [package.dependencies]
@@ -1576,4 +1576,4 @@ pretty-diffs = ["icdiff"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "150b05a14dbc5b5db35ddd98d367359d2fe581fe73bca94401aee97a39f1640d"
+content-hash = "33cb94676c76999393e72121b63396e243661b22a2629ae74d77accfbe32aae1"
