@@ -86,9 +86,10 @@ def install_minimal_esphome(config_path, *args):
             *args,
         ]
     )
+
     wait_for_ota(
         minimal_esphome.minimal_config["wifi"]["use_address"],
-        minimal_esphome.minimal_config["ota"]["port"],
+        minimal_esphome.minimal_config["ota"][0]["port"],
     )
     os.remove(minimal_esphome.minimal_config_path)
 
