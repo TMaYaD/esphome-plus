@@ -668,13 +668,13 @@ gmpy2 = ["gmpy2"]
 
 [[package]]
 name = "esphome"
-version = "2024.11.3"
-description = "Make creating custom firmwares for ESP32/ESP8266 super easy."
+version = "2024.12.0"
+description = "ESPHome is a system to configure your microcontrollers by simple yet powerful configuration files and control them remotely through Home Automation systems."
 optional = false
 python-versions = ">=3.9.0"
 files = [
-    {file = "esphome-2024.11.3-py3-none-any.whl", hash = "sha256:f6070f938376b9d65bf8c33f96185590883fdf1af60e19d5be7e45884b2a2119"},
-    {file = "esphome-2024.11.3.tar.gz", hash = "sha256:03c09eea601454e4dac69e918e4de6fd1b7f713746c512207ddca9d4cab5b671"},
+    {file = "esphome-2024.12.0-py3-none-any.whl", hash = "sha256:f5108b26f7dbd55a97c671b02a3dcced20e682c7b6679c02a3d422b499b32bef"},
+    {file = "esphome-2024.12.0.tar.gz", hash = "sha256:b6d012c7307d8925ad5f9a99f05eb460fb7d686a156d68e8f78ea0dc99b76c7d"},
 ]
 
 [package.dependencies]
@@ -683,7 +683,7 @@ argcomplete = ">=2.0.0"
 click = "8.1.7"
 colorama = "0.4.6"
 cryptography = "43.0.0"
-esphome-dashboard = "20241120.0"
+esphome-dashboard = "20241217.1"
 esptool = "4.7.0"
 freetype-py = "2.5.1"
 glyphsets = "1.0.0"
@@ -704,19 +704,19 @@ voluptuous = "0.14.2"
 zeroconf = "0.132.2"
 
 [package.extras]
-dev = ["clang-format (==13.0.1)", "clang-tidy (==14.0.6)", "yamllint (==1.35.1)"]
+dev = ["clang-format (==13.0.1)", "clang-tidy (==18.1.8)", "yamllint (==1.35.1)"]
 displays = ["cairosvg (==2.7.1)"]
 test = ["asyncmock (==0.4.2)", "black (==24.4.2)", "flake8 (==7.0.0)", "hypothesis (==6.92.1)", "pre-commit", "pylint (==3.2.7)", "pytest (==8.2.0)", "pytest-asyncio (==0.23.6)", "pytest-cov (==5.0.0)", "pytest-mock (==3.14.0)", "pyupgrade (==3.15.2)"]
 
 [[package]]
 name = "esphome-dashboard"
-version = "20241120.0"
+version = "20241217.1"
 description = "ESPHome dashboard"
 optional = false
 python-versions = "*"
 files = [
-    {file = "esphome_dashboard-20241120.0-py3-none-any.whl", hash = "sha256:5a2b54440879f314f99164d76eb1b056a6091e0aebc8b5232637972a02b275fc"},
-    {file = "esphome_dashboard-20241120.0.tar.gz", hash = "sha256:ffaca722250d75bec945c32edb4187dfa44d1dc7931657a09691375ad2c44b89"},
+    {file = "esphome_dashboard-20241217.1-py3-none-any.whl", hash = "sha256:3f08a16b203fb67c0bfaac7032b865002ee4e843a7c148f1fc65704a0b9174fb"},
+    {file = "esphome_dashboard-20241217.1.tar.gz", hash = "sha256:fc996c6e76dcf41af66cad79f95b8e8c2620920dc49b191a1ff3ac9e4bb2a42a"},
 ]
 
 [[package]]
@@ -2093,4 +2093,4 @@ pretty-diffs = ["icdiff"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "d359381eb87c807740e0758ee35c7f86a4edd2aea3decaaa470bf898da129c01"
+content-hash = "496f36b94128c10a8784b16f177399a5c30b6934f16a86ef512cd4aa16d18bdf"
