@@ -24,6 +24,13 @@ def two_stage(config_path, args):
     perform_two_stage(config_path, args)
 
 
+@click.command(context_settings=dict(ignore_unknown_options=True))
+@click.argument("config_path", type=click.Path(exists=True))
+@click.argument("args", nargs=-1, type=click.UNPROCESSED)
+def run_minimal(config_path, args):
+    install_minimal_esphome(config_path, *args)
+
+
 def perform_two_stage(config_path, args):
     try:
         with OTABinarySizeErrorCatcher():
