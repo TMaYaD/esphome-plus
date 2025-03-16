@@ -137,20 +137,15 @@ class MinimalEsphome:
     def minimal_config(self):
         # CORE.config_path = self.minimal_config_path
 
-        config = OrderedDict()
-        config["esphome"] = self.full_config["esphome"]
-        config["esphome"]["name"] += "-minimal"
-
         platform = self.platform(self.full_config)
 
+        config = pluck_config(
+            self.full_config,
+            ["esphome", platform, "logger", "wifi", "ota", "captive_portal"],
+        )
+
         config["esphome"]["build_path"] = "build/minimal/" + platform
-        config[platform] = self.full_config[platform]
-
-        config["logger"] = self.full_config["logger"]
-        config["wifi"] = self.full_config["wifi"]
-        config["ota"] = self.full_config["ota"]
-        config["captive_portal"] = self.full_config["captive_portal"]
-
+        config["esphome"]["name"] += "-minimal"
         return config
 
     def generate_minimal_config(self):
@@ -166,3 +161,25 @@ class MinimalEsphome:
             return "bk72xx"
         else:
             raise ValueError("Unknown platform")
+
+
+def pluck_config(
+    source: OrderedDict, keys: list, skip_missing: bool = True
+) -> OrderedDict:
+    """Extract specified keys from source OrderedDict.
+
+    Args:
+        source: Source OrderedDict to pluck from
+        keys: List of keys to extract
+        skip_missing: If True, skip keys that don't exist. If False, raise KeyError
+
+    Returns:
+        OrderedDict containing only the specified keys
+    """
+    result = OrderedDict()
+    for key in keys:
+        if key in source:
+            result[key] = source[key]
+        elif not skip_missing:
+            raise KeyError(f"Required key '{key}' not found in config")
+    return result
