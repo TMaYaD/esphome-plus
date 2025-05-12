@@ -694,14 +694,14 @@ gmpy2 = ["gmpy2"]
 
 [[package]]
 name = "esphome"
-version = "2025.4.1"
+version = "2025.4.2"
 description = "ESPHome is a system to configure your microcontrollers by simple yet powerful configuration files and control them remotely through Home Automation systems."
 optional = false
 python-versions = ">=3.9.0"
 groups = ["main"]
 files = [
-    {file = "esphome-2025.4.1-py3-none-any.whl", hash = "sha256:2c82f516704e7b2d98d0c606735084861009f4d22e88fd3d5e56ee55b93a4e67"},
-    {file = "esphome-2025.4.1.tar.gz", hash = "sha256:0457fb545f2721320d1753eab959e610780e83b04a5e3aa9f7d1151ac21a2a90"},
+    {file = "esphome-2025.4.2-py3-none-any.whl", hash = "sha256:2f0c9b013d26b732d1720f8688432aa712672d3d25001a477929042529d0e2e9"},
+    {file = "esphome-2025.4.2.tar.gz", hash = "sha256:e92e138a44467810ab047e514db3770d2d3f58d3f11f68baefad3269756c6736"},
 ]
 
 [package.dependencies]
@@ -1899,4 +1899,4 @@ pretty-diffs = ["icdiff"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "54b9420d13865c2ccf54f34963bbcef4057b3ae580d2a41ccf1a8a6f5a929e70"
+content-hash = "f6b67c8a2252588328459ef82e64e7b8068fd3e6113485efbad8cb2b10da780c"
