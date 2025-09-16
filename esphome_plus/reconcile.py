@@ -42,21 +42,11 @@ def reconcile(ctx, config_path, **kwargs):
     If CONFIG_PATH is a directory, reconcile will apply to all .yaml files
     """
 
-    config_files = []
-    if os.path.isdir(config_path):
-        # config_path is a directory. Apply reconcile_file to all .yaml files in the directory
-        config_files = [
-            os.path.join(config_path, file_name)
-            for file_name in sorted(os.listdir(config_path))
-            if file_name.endswith(".yaml") and not file_name.startswith(".")
-        ]
-
-        # If CONFIG_PATH is a directory, we need to pass --no-logs to esphome, otherwise
+    config_files = get_config_files(config_path)
+    if len(config_files) > 1:
+        # If CONFIG_PATH is a directory(or more than one file), we need to pass --no-logs to esphome, otherwise
         # it will get stuck streaming logs from the first file
         kwargs["args"] += ("--no-logs",)
-
-    else:
-        config_files = [config_path]
 
     errors = {}
     for file_name in config_files:
@@ -135,3 +125,34 @@ def load_config_content_from_device(config):
         return normalize_config(response.text)
     except requests.exceptions.RequestException as e:
         raise UpstreamConfigError(f"Error fetching YAML from {address}: {e}") from e
+
+
+def get_config_files(config_path):
+    if not os.path.isdir(config_path):
+        return [config_path]
+
+    # Read .esphomeignore file if it exists
+    ignore_patterns = []
+    ignore_file = os.path.join(config_path, ".esphomeignore")
+    if os.path.exists(ignore_file):
+        with open(ignore_file) as f:
+            ignore_patterns = [
+                line.strip() for line in f if line.strip() and not line.startswith("#")
+            ]
+
+    # config_path is a directory. Apply reconcile_file to all .yaml files in the directory
+    yaml_files = []
+    for file_name in sorted(os.listdir(config_path)):
+        if not file_name.endswith(".yaml"):
+            continue
+
+        if file_name.startswith("."):
+            continue
+
+        # Skip if file matches any ignore pattern
+        if any(pattern in file_name for pattern in ignore_patterns):
+            continue
+
+        yaml_files.append(os.path.join(config_path, file_name))
+
+    return yaml_files
