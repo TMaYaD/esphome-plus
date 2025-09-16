@@ -13,6 +13,14 @@ from .config_util import normalize_config, show_diff
 from .two_stage import perform_two_stage
 
 
+class ConfigError(Exception):
+    pass
+
+
+class UpstreamConfigError(Exception):
+    pass
+
+
 @click.command(context_settings=dict(ignore_unknown_options=True))
 @click.argument("config_path", type=click.Path(exists=True))
 @click.option("--quite", "-q", is_flag=True, help="Hide verbose output")
@@ -34,27 +42,28 @@ def reconcile(ctx, config_path, **kwargs):
     If CONFIG_PATH is a directory, reconcile will apply to all .yaml files
     """
 
-    if not os.path.isdir(config_path):
-        reconcile_file(ctx, config_path, **kwargs)
-        return
+    config_files = []
+    if os.path.isdir(config_path):
+        # config_path is a directory. Apply reconcile_file to all .yaml files in the directory
+        config_files = [
+            os.path.join(config_path, file_name)
+            for file_name in sorted(os.listdir(config_path))
+            if file_name.endswith(".yaml") and not file_name.startswith(".")
+        ]
 
-    # If CONFIG_PATH is a directory, we need to pass --no-logs to esphome, otherwise
-    # it will get stuck streaming logs from the first file
-    kwargs["args"] += ("--no-logs",)
+        # If CONFIG_PATH is a directory, we need to pass --no-logs to esphome, otherwise
+        # it will get stuck streaming logs from the first file
+        kwargs["args"] += ("--no-logs",)
+
+    else:
+        config_files = [config_path]
 
     errors = {}
-    # config_path is a directory. Apply reconcile_file to all .yaml files in the directory
-    for file_name in sorted(os.listdir(config_path)):
-        if not file_name.endswith(".yaml"):
-            continue
-
-        if file_name.startswith("."):
-            continue
-
+    for file_name in config_files:
         try:
             reconcile_file(
                 ctx,
-                os.path.join(config_path, file_name),
+                file_name,
                 **kwargs,
             )
         except Exception as e:
@@ -73,6 +82,9 @@ def reconcile_file(ctx, config_path, quite, ask, dry_run, args):
         click.echo(f"Reconciling {config_path}")
 
     config = load_config_from_file(config_path)
+    if not config:
+        raise ConfigError(f"Could not load config from {config_path}")
+
     current_config = load_config_content_from_device(config)
 
     # Compute the semantic difference between the two YAML files
@@ -122,5 +134,4 @@ def load_config_content_from_device(config):
 
         return normalize_config(response.text)
     except requests.exceptions.RequestException as e:
-        click.echo(f"Error fetching YAML from {address}: {e}", err=True)
-        raise e
+        raise UpstreamConfigError(f"Error fetching YAML from {address}: {e}") from e
