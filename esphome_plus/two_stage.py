@@ -28,13 +28,14 @@ def two_stage(config_path, args):
 @click.argument("config_path", type=click.Path(exists=True))
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def run_minimal(config_path, args):
-    install_minimal_esphome(config_path, *args)
+    install_minimal_esphome(config_path, wait_for_ota=False, *args)
 
 
 def perform_two_stage(config_path, args):
     try:
         with OTABinarySizeErrorCatcher():
             CORE.reset()
+
             run_esphome(["esphome", "run", config_path, *args])
     except OTABinarySizeError as e:
         # If we get an OTA error, we need to run esphome again with --no-logs
@@ -80,7 +81,7 @@ class OTABinarySizeErrorCatcher:
 
 
 # read the config file and generate a minimal version, then install it
-def install_minimal_esphome(config_path, *args):
+def install_minimal_esphome(config_path, wait_for_ota=True, *args):
     minimal_esphome = MinimalEsphome(config_path)
     minimal_esphome.generate_minimal_config()
     CORE.reset()
@@ -94,10 +95,12 @@ def install_minimal_esphome(config_path, *args):
         ]
     )
 
-    wait_for_ota(
-        minimal_esphome.minimal_config["wifi"]["use_address"],
-        minimal_esphome.minimal_config["ota"][0]["port"],
-    )
+    if wait_for_ota:
+        wait_for_ota(
+            minimal_esphome.minimal_config["wifi"]["use_address"],
+            minimal_esphome.minimal_config["ota"][0]["port"],
+        )
+
     os.remove(minimal_esphome.minimal_config_path)
 
 
