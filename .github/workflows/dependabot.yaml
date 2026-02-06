@@ -1,30 +1,45 @@
 name: Auto approve and merge PRs by dependabot
 
+# This workflow has been updated to fix several issues:
+# 1. Updated to use latest dependabot/fetch-metadata@v2.2.0
+# 2. Replaced deprecated pascalgn/automerge-action with GitHub CLI
+# 3. Added explicit permissions for GITHUB_TOKEN
+# 4. Improved trigger conditions
+#
+# REQUIREMENTS:
+# - Auto-merge must be enabled on the repository (Settings > General > Pull Requests > "Allow auto-merge")
+# - Branch protection rules should be configured to require status checks
+# - The workflow will only run for dependabot PRs
+
 # Trigger the workflow on pull request
 on:
-  pull_request_target: {}
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+# Add explicit permissions for GITHUB_TOKEN
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   dependabot:
-    name: Auto Approve and merge PR by dependabot # Name of the job
+    name: Auto Approve and merge PR by dependabot
     if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
-    runs-on: ubuntu-latest # Environment on which the job runs
+    runs-on: ubuntu-latest
     steps:
-      - name: Auto approve
-        uses: hmarr/auto-approve-action@v4.0.0 # Custom action for auto approval already available on marketplace
-        # Perform the auto approve action only when the PR is raised by dependabot
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.2.0
         with:
-          # Create a personal access token and store it under the Secrets section of the particular repository
-          # with the key "GITHUB_ACTIONS_TOKEN"
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Auto merge
-        # Custom action for auto merging already available on marketplace
-        uses: pascalgn/automerge-action@v0.16.4
+      - name: Auto approve
+        uses: hmarr/auto-approve-action@v4.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge for dependabot PRs
+        run: gh pr merge --auto --merge "$PR_URL"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # By default, whenever dependabot raises a PR, it automatically assigns a label named "dependencies"
-          # So, this action merges those PRs labelled "dependencies" only
-          MERGE_LABELS: dependencies
-          MERGE_RETRIES: "30"
-          MERGE_RETRY_SLEEP: "30000"
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
