@@ -905,15 +905,15 @@ files = [
 
 [[package]]
 name = "icdiff"
-version = "2.0.7"
+version = "2.0.10"
 description = "improved colored diff"
 optional = false
 python-versions = "*"
 groups = ["main"]
 markers = "extra == \"pretty-diffs\""
 files = [
-    {file = "icdiff-2.0.7-py3-none-any.whl", hash = "sha256:f05d1b3623223dd1c70f7848da7d699de3d9a2550b902a8234d9026292fb5762"},
-    {file = "icdiff-2.0.7.tar.gz", hash = "sha256:f79a318891adbf59a45e3a7694f5e1f18c5407065264637072ac8363b759866f"},
+    {file = "icdiff-2.0.10-py3-none-any.whl", hash = "sha256:fd8ce592d94261c435e2a410f668a41ec3be4527878f8df01100797021d8edb0"},
+    {file = "icdiff-2.0.10.tar.gz", hash = "sha256:75a3de5c9af35ab45fb0504df59770c514a12c0d2b2c99e5f9c5c2429957e133"},
 ]
 
 [[package]]
@@ -2177,4 +2177,4 @@ pretty-diffs = ["icdiff"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "cb9349421b394f8acda1093d59b4d3ed1fe3f25809c620349a33b9cab595c7f5"
+content-hash = "a8e0a1320b9367dc0c6f0b03637c8c8021c65450b09e5cc26de81eaf360017a8"
