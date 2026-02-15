@@ -1,14 +1,13 @@
+import traceback
 import click
+import functools
 import os
 import requests
-
+from pathlib import Path
 from deepdiff import DeepDiff
-from esphome.__main__ import run_esphome
 from esphome.config import read_config, strip_default_ids
 from esphome.core import CORE
 from esphome.yaml_util import dump
-
-from .upstream import make_wrapper
 from .config_util import normalize_config, show_diff
 from .two_stage import perform_two_stage
 
@@ -28,9 +27,13 @@ class UpstreamConfigError(Exception):
 @click.option(
     "--dry-run", "-d", is_flag=True, help="Show changes without applying them"
 )
+@click.option("--timeout", "-t", type=int, help="Timeout for the device config request")
+@click.option("--verbose", "-v", is_flag=True, help="Show verbose output")
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @click.pass_context
-def reconcile(ctx, config_path, **kwargs):
+def reconcile(
+    ctx, config_path, dry_run=False, verbose=False, **kwargs
+):  # pylint: disable=unused-argument
     """
     Reconcile ESPHome YAML files with a running device.
 
@@ -48,86 +51,116 @@ def reconcile(ctx, config_path, **kwargs):
         # it will get stuck streaming logs from the first file
         kwargs["args"] += ("--no-logs",)
 
-    errors = {}
-    for file_name in config_files:
-        try:
-            reconcile_file(
-                ctx,
-                file_name,
-                **kwargs,
-            )
-        except Exception as e:
-            errors[file_name] = e
-        finally:
-            CORE.reset()
+    reconcilers = [ReconcileService(file_name, **kwargs) for file_name in config_files]
+    pending_changes = [
+        reconciler
+        for reconciler in reconcilers
+        if reconciler.compare_and_decide() and not reconciler.errors
+    ]
 
-    if errors:
+    if dry_run:
+        click.echo("Dry run, no changes will be applied")
+        return
+
+    for reconciler in pending_changes:
+        reconciler.apply_changes()
+
+    if any(reconciler.errors for reconciler in reconcilers):
         click.echo("Errors occurred while reconciling files:")
-        for file_name, e in errors.items():
-            click.echo(f"Error reconciling {file_name}: {e}", err=True)
+        for reconciler in reconcilers:
+            for e in reconciler.errors:
+                click.echo(f"Error reconciling {reconciler.config_path}: {e}", err=True)
+                if verbose:
+                    click.echo("".join(traceback.format_exception(e)), err=True)
 
 
-def reconcile_file(ctx, config_path, quite, ask, dry_run, args):
-    if not quite:
-        click.echo(f"Reconciling {config_path}")
+class ReconcileService:
+    """Service class to handle ESPHome configuration reconciliation."""
 
-    config = load_config_from_file(config_path)
-    if not config:
-        raise ConfigError(f"Could not load config from {config_path}")
+    def __init__(self, config_path, quite=False, ask=False, args=None, timeout=30):
+        self.config_path = config_path
+        self.quite = quite
+        self.ask = ask
+        self.args = args or []
+        self.errors = []
+        self.timeout = timeout
 
-    current_config = load_config_content_from_device(config)
-
-    # Compute the semantic difference between the two YAML files
-    diff = DeepDiff(
-        current_config,
-        config,
-        ignore_order=True,
-        exclude_paths=[
+        # Exclude paths for diff comparison
+        self.exclude_paths = [
             "root['substitutions']",
             "root['wifi']['use_address']",
             "root['esphome']['min_version']",
-        ],
-    )
+        ]
 
-    if not diff:
-        click.echo("No difference found")
-        return
+    @functools.cached_property
+    def file_config(self):
+        """Load configuration from the specified file."""
+        CORE.reset()
+        CORE.config_path = Path(self.config_path)
 
-    if not quite:
-        show_diff(current_config, config)
+        # Create a Config object
+        config = strip_default_ids(read_config({}))
+        normalized_config = normalize_config(dump(config))
 
-        # If there are differences, ask the user if they want to apply them
-        if ask and not click.confirm("Apply these changes?"):
-            return
+        if not normalized_config:
+            raise ConfigError(f"Could not load config from {self.config_path}")
+        return normalized_config
 
-    if dry_run:
-        return
+    @functools.cached_property
+    def device_config(self):
+        """Load current configuration from the device."""
+        address = self.file_config["wifi"]["use_address"]
 
-    # Apply the changes
-    perform_two_stage(config_path, args)
+        try:
+            response = requests.get(
+                f"http://{address}/config.yaml", timeout=self.timeout
+            )
+            response.raise_for_status()  # Check for HTTP errors
 
+            return normalize_config(response.text)
+        except requests.exceptions.RequestException as e:
+            raise UpstreamConfigError(f"Error fetching YAML from {address}: {e}") from e
 
-def load_config_from_file(path):
-    CORE.config_path = path
+    def compare_and_decide(self):
+        """Compare configurations and determine if changes should be applied."""
+        click.echo(f"Comparing configurations for {self.config_path}: ", nl=False)
+        diff = None
+        try:
+            diff = DeepDiff(
+                self.device_config,
+                self.file_config,
+                ignore_order=True,
+                exclude_paths=self.exclude_paths,
+            )
+        except Exception as e:
+            click.echo("Error comparing configurations")
+            self.errors.append(e)
+            return False
 
-    # Create a Config object
-    config = strip_default_ids(read_config({}))
-    return normalize_config(dump(config))
+        if not diff:
+            click.echo("No difference found")
+            return False
 
+        if not self.quite:
+            click.echo("Differences found:")
+            show_diff(self.device_config, self.file_config)
 
-def load_config_content_from_device(config):
-    address = config["wifi"]["use_address"]
+        if not self.ask:
+            return True
 
-    try:
-        response = requests.get(f"http://{address}/config.yaml")
-        response.raise_for_status()  # Check for HTTP errors
+        return click.confirm("Apply these changes?")
 
-        return normalize_config(response.text)
-    except requests.exceptions.RequestException as e:
-        raise UpstreamConfigError(f"Error fetching YAML from {address}: {e}") from e
+    def apply_changes(self):
+        """Apply changes to the device."""
+        try:
+            CORE.reset()
+            perform_two_stage(self.config_path, self.args)
+        except Exception as e:
+            self.errors.append(e)
 
 
 def get_config_files(config_path):
+    """Get list of YAML config files from path, respecting .esphomeignore."""
     if not os.path.isdir(config_path):
         return [config_path]
 
@@ -135,7 +168,7 @@ def get_config_files(config_path):
     ignore_patterns = []
     ignore_file = os.path.join(config_path, ".esphomeignore")
     if os.path.exists(ignore_file):
-        with open(ignore_file) as f:
+        with open(ignore_file, encoding="utf-8") as f:
             ignore_patterns = [
                 line.strip() for line in f if line.strip() and not line.startswith("#")
             ]
