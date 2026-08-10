@@ -1297,14 +1297,14 @@ test = ["pytest (>=9.0.3,<9.1.0)", "pytest-benchmark (>=5.2.3,<5.3.0)", "pytest-
 
 [[package]]
 name = "esphome"
-version = "2026.7.3"
+version = "2026.7.4"
 description = "ESPHome is a system to configure your microcontrollers by simple yet powerful configuration files and control them remotely through Home Automation systems."
 optional = false
 python-versions = "<3.15,>=3.12.0"
 groups = ["main"]
 files = [
-    {file = "esphome-2026.7.3-py3-none-any.whl", hash = "sha256:3e4ae7f8efa963b75b09226ae2b255f89a493198ff4f12666a65de3cfa09eb15"},
-    {file = "esphome-2026.7.3.tar.gz", hash = "sha256:5eb3345326654b4abf7a28cc8b9f5d05f5d9ee22991731e53725573ac140d149"},
+    {file = "esphome-2026.7.4-py3-none-any.whl", hash = "sha256:90583985d761c40dd079f1f4acd766f3c3aa8930a932a063bf0aa205bfc1e306"},
+    {file = "esphome-2026.7.4.tar.gz", hash = "sha256:c2b7d9e82b9bcb59e0bdbb1e67edd6fe79e2e96b2a09c25b1e0553b5255c538d"},
 ]
 
 [package.dependencies]
@@ -1319,12 +1319,12 @@ cryptography = [
 ]
 esphome-glyphsets = "0.2.0"
 esptool = "5.3.1"
-filelock = "3.29.0"
+filelock = "3.32.0"
 freetype-py = "2.5.1"
 jinja2 = "3.1.6"
 paho-mqtt = "1.6.1"
 pillow = "12.3.0"
-platformdirs = "4.10.0"
+platformdirs = "4.11.0"
 platformio = "6.1.19"
 puremagic = "2.2.0"
 py7zr = "1.1.3"
@@ -1403,14 +1403,14 @@ tests = ["asttokens (>=2.1.0)", "coverage", "coverage-enable-subprocess", "ipyth
 
 [[package]]
 name = "filelock"
-version = "3.29.0"
+version = "3.32.0"
 description = "A platform independent file lock."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "filelock-3.29.0-py3-none-any.whl", hash = "sha256:96f5f6344709aa1572bbf631c640e4ebeeb519e08da902c39a001882f30ac258"},
-    {file = "filelock-3.29.0.tar.gz", hash = "sha256:69974355e960702e789734cb4871f884ea6fe50bd8404051a3530bc07809cf90"},
+    {file = "filelock-3.32.0-py3-none-any.whl", hash = "sha256:d396bea984af47333ef05e50eae7eff88c84256de6112aea0ec48a233c064fe3"},
+    {file = "filelock-3.32.0.tar.gz", hash = "sha256:7be2ad23a14607ccc71808e68fe30848aeace7058ace17852f68e2a68e310402"},
 ]
 
 [[package]]
@@ -2070,14 +2070,14 @@ xmp = ["defusedxml"]
 
 [[package]]
 name = "platformdirs"
-version = "4.10.0"
+version = "4.11.0"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "platformdirs-4.10.0-py3-none-any.whl", hash = "sha256:fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a"},
-    {file = "platformdirs-4.10.0.tar.gz", hash = "sha256:31e761a6a0ca04faf7353ea759bdba55652be214725111e5aac52dfa29d4bef7"},
+    {file = "platformdirs-4.11.0-py3-none-any.whl", hash = "sha256:360ccded2b7fce0af0ff80cc8f5942a1c5d99b0e856033acb030bfc634709e74"},
+    {file = "platformdirs-4.11.0.tar.gz", hash = "sha256:0555d18370482847566ffabcaa53ad7c6c1c29f195989ae1ed634a05f76ea1e0"},
 ]
 
 [[package]]
