@@ -1,7 +1,7 @@
 # Global ARG, available to all stages (if renewed)
 ARG WORKDIR="/app"
 
-FROM python:3.12 AS builder
+FROM python:3.15 AS builder
 
 # Renew (https://stackoverflow.com/a/53682110):
 ARG WORKDIR
@@ -21,7 +21,7 @@ COPY . .
 
 RUN poetry install --only main --no-ansi
 
-FROM python:3.12-slim
+FROM python:3.15-slim
 
 ARG WORKDIR
 
